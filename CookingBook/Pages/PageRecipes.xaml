@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CookingBook.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="452.88" d:DesignWidth="800"
       Title="PageRecipes">
 
     <Grid Background="#FF6FCA27">
@@ -14,9 +14,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="33"/>
-            <RowDefinition Height="497"/>
+            <RowDefinition Height="497*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
+
+        <!-- Панель фильтров и поиска -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="0">
             <StackPanel.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -26,8 +28,10 @@
             </StackPanel.Background>
             <ComboBox x:Name="ComboFilter" VerticalAlignment="Center" Width="209" SelectionChanged="ComboFilter_SelectionChanged" Height="26" Margin="5"/>
             <ComboBox x:Name="ComboSort" VerticalAlignment="Center" Width="190" Height="26" Margin="5" SelectionChanged="ComboSort_SelectionChanged"/>
-            <TextBox x:Name="TextSearch" TextWrapping="Wrap" VerticalAlignment="Center" Width="186" Height="26" Margin="5" TextChanged="TextSearch_TextChanged"></TextBox>
+            <TextBox x:Name="TextSearch" TextWrapping="Wrap" VerticalAlignment="Center" Width="186" Height="26" Margin="5" TextChanged="TextSearch_TextChanged"/>
         </StackPanel>
+
+        <!-- Список рецептов -->
         <ListView x:Name="listProduct" Grid.Row="1" ScrollViewer.CanContentScroll="False" Margin="0,5,0,45" Grid.RowSpan="2">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -39,30 +43,32 @@
                         </Grid.ColumnDefinitions>
                         <Image Source="{Binding CurrentPhoto}" Grid.Column="0" Margin="10"/>
                         <StackPanel Grid.Column="1" Width="auto" Orientation="Vertical" HorizontalAlignment="Left">
-                            <TextBlock Width="auto" TextWrapping="Wrap" Height="auto" Text="{Binding RecipeName}"/>
-                            <TextBlock Width="auto" TextWrapping="Wrap" Height="auto">
+                            <TextBlock Text="{Binding RecipeName}" FontWeight="Bold"/>
+                            <TextBlock>
                                 <Run Text="Категория: "/>
                                 <Run Text="{Binding Categories.CategoryName}"/>
                             </TextBlock>
-
-                            <TextBlock Width="auto" TextWrapping="Wrap" Height="auto">
-                                    <Run Text="Описание: "/>
-                                    <Run Text="{Binding Description}"/>
-                            </TextBlock>
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="2" Width="auto" Orientation="Vertical" HorizontalAlignment="Left">
-                            <TextBlock Width="auto" TextWrapping="Wrap" Height="auto">
-                                    <Run Text="Время: "/>
-                                    <Run Text="{Binding CookingTime}"/>
-                                    <Run Text="мин"/>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock>
+                                <Run Text="Время: "/>
+                                <Run Text="{Binding CookingTime}"/>
+                                <Run Text=" мин"/>
                             </TextBlock>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <TextBlock x:Name="tbCounter" Text="Не найдено" Grid.Row="2" Width="95" HorizontalAlignment="Left" Height="22" Margin="695,0,0,0"/>
 
-        <Label Grid.Row="2" Name="LabelCount"></Label>
+        <!-- Кнопки управления -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+            <Button x:Name="btnAdd" Content="Добавить" Width="100" Margin="5" Click="BtnAdd_Click"/>
+            <Button x:Name="btnEdit" Content="Изменить" Width="100" Margin="5" Click="BtnEdit_Click"/>
+            <Button x:Name="btnDelete" Content="Удалить" Width="100" Margin="5" Click="BtnDelete_Click"/>
+        </StackPanel>
+
+        <TextBlock x:Name="tbCounter" Text="Не найдено" Grid.Row="2" HorizontalAlignment="Left" Margin="10,0,0,0"/>
     </Grid>
 </Page>

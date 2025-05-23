@@ -1,5 +1,4 @@
 ﻿using CookingBook.AppData;
-using CookingBook.AppData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,73 +24,126 @@ namespace CookingBook.Pages
         public PageRecipes()
         {
             InitializeComponent();
-            List<Recipes> products = AppConnect.model01.Recipes.ToList();
-            var sortList = new List<string>{
-                "По умолчанию",
-                "По убыванию",
-                "По возрастанию"
-            };
-            ComboSort.ItemsSource = sortList;
-
-            var categoriesFilter = new List<string> { "Все" };
-            var categories = AppConnect.model01.Categories.ToList();
-            foreach (var category in categories)
-            {
-                categoriesFilter.Add(category.CategoryName);
-            }
-            ComboFilter.ItemsSource = categoriesFilter;
-
-            if (products.Count > 0)
-            {
-                tbCounter.Text = "Найдено " + products.Count + "товаров";
-            }
-            else
-            {
-                tbCounter.Text = "Не найдено";
-            }
-            listProduct.ItemsSource = products;
+            LoadRecipes();
+            LoadFiltersAndSorting();
         }
 
-        Recipes[] FindRecipes()
+        private void LoadRecipes()
         {
-            var recipe = AppData.AppConnect.model01.Recipes.ToList();
-            var recipesall = recipe;
-            if (TextSearch != null)
+            var recipes = AppConnect.model01.Recipes.ToList();
+            listProduct.ItemsSource = recipes;
+            UpdateCounter(recipes.Count);
+        }
+
+        private void LoadFiltersAndSorting()
+        {
+            // Загрузка категорий для фильтра
+            var categories = new List<string> { "Все" };
+            categories.AddRange(AppConnect.model01.Categories.Select(c => c.CategoryName));
+            ComboFilter.ItemsSource = categories;
+
+            // Загрузка вариантов сортировки
+            ComboSort.ItemsSource = new List<string>
             {
-                recipe = recipe.Where(x => x.RecipeName.ToLower().Contains(TextSearch.Text.ToLower())).ToList();
+                "По умолчанию",
+                "По времени (убывание)",
+                "По времени (возрастание)"
+            };
+        }
+
+        private void UpdateCounter(int count)
+        {
+            tbCounter.Text = count > 0 ? $"Найдено {count} рецептов" : "Ничего не найдено";
+        }
+
+        private List<Recipes> FindRecipes()
+        {
+            var recipes = AppConnect.model01.Recipes.ToList();
+
+            // Фильтрация по поиску
+            if (!string.IsNullOrWhiteSpace(TextSearch.Text))
+            {
+                recipes = recipes.Where(r => r.RecipeName.ToLower()
+                                             .Contains(TextSearch.Text.ToLower()))
+                                             .ToList();
             }
 
+            // Фильтрация по категории
             if (ComboFilter.SelectedIndex > 0)
             {
-                recipe = recipe.Where(x => x.CategoryID == ComboFilter.SelectedIndex).ToList();
+                recipes = recipes.Where(r => r.Categories.CategoryName ==
+                                           ComboFilter.SelectedItem.ToString())
+                                           .ToList();
             }
 
-            if (ComboSort.SelectedIndex > 0)
+            // Сортировка
+            switch (ComboSort.SelectedIndex)
             {
-                switch (ComboSort.SelectedIndex)
-                {
-                    case 1:
-                        recipe = recipe.OrderByDescending(x => x.CookingTime).ToList();
-                        break;
-                    case 2:
-                        recipe = recipe.OrderBy(x => x.CookingTime).ToList();
-
-                        break;
-                }
+                case 1:
+                    recipes = recipes.OrderByDescending(r => r.CookingTime).ToList();
+                    break;
+                case 2:
+                    recipes = recipes.OrderBy(r => r.CookingTime).ToList();
+                    break;
             }
-            if (recipe.Count() > 0)
+
+            UpdateCounter(recipes.Count);
+            return recipes;
+        }
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AddEditPages(new Recipes()));
+        }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (listProduct.SelectedItem is Recipes selectedRecipe)
             {
-                LabelCount.Content = "Найдено " + recipe.Count() + " из " + recipesall.Count;
+                NavigationService.Navigate(new AddEditPages(selectedRecipe));
             }
             else
             {
-                LabelCount.Content = "Ничего не найдено ";
+                MessageBox.Show("Пожалуйста, выберите рецепт для редактирования",
+                              "Внимание",
+                              MessageBoxButton.OK,
+                              MessageBoxImage.Warning);
             }
-            return recipe.ToArray();
         }
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (listProduct.SelectedItem is Recipes selectedRecipe)
+            {
+                var result = MessageBox.Show($"Удалить рецепт '{selectedRecipe.RecipeName}'?",
+                                           "Подтверждение удаления",
+                                           MessageBoxButton.YesNo,
+                                           MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        AppConnect.model01.Recipes.Remove(selectedRecipe);
+                        AppConnect.model01.SaveChanges();
+                        LoadRecipes();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при удалении: {ex.Message}",
+                                      "Ошибка",
+                                      MessageBoxButton.OK,
+                                      MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите рецепт для удаления",
+                                "Внимание",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+            }
         }
 
         private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -107,6 +159,11 @@ namespace CookingBook.Pages
         private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             listProduct.ItemsSource = FindRecipes();
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Можно добавить дополнительную логику при выборе элемента
         }
     }
 }
