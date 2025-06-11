@@ -8,7 +8,52 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageAbout">
 
-    <Grid>
-        
+    <Grid Background="#FF6FCA27">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель -->
+        <DockPanel Background="#FFCABB15" VerticalAlignment="Center" Grid.Row="0" Margin="5">
+            <Button Content="← Назад" Width="100" Height="30" Margin="10,0"
+                    Click="BtnBack_Click"/>
+            <TextBlock Text="О приложении" FontSize="20" FontWeight="Bold"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Margin="0,0,10,0"/>
+        </DockPanel>
+
+        <!-- Основное содержимое -->
+        <ScrollViewer Grid.Row="1" Margin="10">
+            <StackPanel>
+                <!-- Информация о приложении -->
+                <Border Background="White" CornerRadius="10" Padding="15" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="CookingBook" FontSize="24" FontWeight="Bold" 
+                                   Foreground="#FF75425E" Margin="0,0,0,10"/>
+                        <TextBlock Text="Ваш цифровой сборник рецептов" FontSize="16" 
+                                   FontWeight="SemiBold" Margin="0,0,0,15"/>
+                        <TextBlock TextWrapping="Wrap">
+                            <Run Text="CookingBook - это удобное приложение для хранения и организации ваших любимых рецептов. "/>
+                            <LineBreak/>
+                            <Run Text="Создавайте, редактируйте и покупайте рецепты, чтобы делиться с друзьями и близкими."/>
+                        </TextBlock>
+                        <TextBlock Text="Версия 1.0.0" Margin="0,15,0,0" FontStyle="Italic"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Блок с QR-кодом -->
+                <Border Background="White" CornerRadius="10" Padding="15" HorizontalAlignment="Right">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Наш плейлист для готовки:" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <Image x:Name="imgQr" Width="150" Height="150" Margin="0,0,0,10"/>
+                        <Button x:Name="Btn_qrcode" Content="Сгенерировать QR-код" 
+                                Width="150" Padding="5" Click="Btn_qrcode_Click"
+                                Foreground="#FFECC286" Background="#FF75425E" 
+                                BorderBrush="Black" Cursor="Hand"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

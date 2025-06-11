@@ -8,7 +8,73 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageOrders">
 
-    <Grid>
-        
+    <Grid Background="#FF6FCA27">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель -->
+        <DockPanel Background="#FFCABB15" VerticalAlignment="Center" Grid.Row="0" Margin="5">
+            <Button Content="← Назад" Width="100" Height="30" Margin="10,0"
+                    Click="BtnBack_Click"/>
+            <TextBlock Text="Мои заказы" FontSize="20" FontWeight="Bold"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Margin="0,0,10,0"/>
+        </DockPanel>
+
+        <!-- Список заказов -->
+        <ListView x:Name="lvOrders" Grid.Row="1" Margin="10">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="5" Background="White">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Информация о заказе -->
+                            <StackPanel Grid.Column="0" Grid.RowSpan="4" Margin="10,0">
+                                <TextBlock>
+                                    <Run Text="Заказ №"/>
+                                    <Run Text="{Binding OrderID}" FontWeight="Bold"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Дата: "/>
+                                    <Run Text="{Binding OrderDate, StringFormat=dd.MM.yyyy}"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Адрес доставки: "/>
+                                    <Run Text="{Binding DeliveryAddress}"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Телефон: "/>
+                                    <Run Text="{Binding Phone}"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- Статус и сумма -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10">
+                                <TextBlock HorizontalAlignment="Right" FontSize="16" Margin="20">
+                                    <Run Text="Сумма: "/>
+                                    <Run Text="{Binding TotalAmount}" FontWeight="Bold"/>
+                                    <Run Text=" руб."/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <TextBlock x:Name="tbEmpty" Text="У вас пока нет заказов." Visibility="Collapsed"
+                   Grid.Row="1" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Page>

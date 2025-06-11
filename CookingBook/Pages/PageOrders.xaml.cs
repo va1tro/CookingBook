@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CookingBook.AppData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,47 @@ namespace CookingBook.Pages
         public PageOrders()
         {
             InitializeComponent();
+            LoadOrders();
+        }
+
+        private void LoadOrders()
+        {
+            // Проверяем, что пользователь авторизован
+            if (AppConnect.CurrentUser == null)
+            {
+                MessageBox.Show("Пользователь не авторизован", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                tbEmpty.Visibility = Visibility.Visible;
+                tbEmpty.Text = "Необходимо авторизоваться";
+                return;
+            }
+
+            try
+            {
+                // Получаем ID текущего пользователя
+                int currentUserId = AppConnect.CurrentUser.AuthorID;
+
+                // Загружаем заказы пользователя
+                var orders = AppData.AppConnect.model01.Orders
+                    .Where(o => o.AuthorID == currentUserId)  // Используем сохраненное значение
+                    .OrderByDescending(o => o.OrderDate)
+                    .ToList();
+
+                lvOrders.ItemsSource = orders;
+                tbEmpty.Visibility = orders.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке заказов: {ex.Message}", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                tbEmpty.Visibility = Visibility.Visible;
+                tbEmpty.Text = "Ошибка загрузки данных";
+            }
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }
