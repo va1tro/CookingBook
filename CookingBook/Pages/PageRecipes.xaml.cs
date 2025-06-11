@@ -1,6 +1,8 @@
 ﻿using CookingBook.AppData;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -165,5 +167,113 @@ namespace CookingBook.Pages
         {
             // Можно добавить дополнительную логику при выборе элемента
         }
+        private void BtnAddToCart_Click(object sender, RoutedEventArgs e)
+        {
+            var recipe = (sender as Button)?.Tag as Recipes;
+            if (recipe != null)
+            {
+                var newCart = new Cart
+                {
+                    RecipeID = recipe.RecipeID,
+                    AuthorID = AppConnect.CurrentUser.AuthorID,
+                    Quantity = 1,
+                    DateAdded = DateTime.Now
+                };
+
+                using (var context = new Entities())
+                {
+                    context.Cart.Add(newCart);
+                    context.SaveChanges();
+                }
+
+                MessageBox.Show($"\"{recipe.RecipeName}\" добавлен в корзину!");
+            }
+        }
+
+        private void BtnAddToFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            var recipe = (sender as Button)?.Tag as Recipes;
+            if (recipe != null)
+            {
+                using (var context = new Entities())
+                {
+                    int currentAuthorId = AppConnect.CurrentUser.AuthorID; // предполагается, что ты где-то хранишь текущего пользователя
+
+                    // Проверка — уже добавлен в избранное?
+                    bool alreadyExists = context.Favorites.Any(f => f.AuthorID == currentAuthorId && f.RecipeID == recipe.RecipeID);
+                    if (alreadyExists)
+                    {
+                        MessageBox.Show("Этот рецепт уже в избранном.", "Избранное", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+
+                    var favorite = new Favorites
+                    {
+                        AuthorID = currentAuthorId,
+                        RecipeID = recipe.RecipeID,
+                        DateAdded = DateTime.Now
+                    };
+
+                    context.Favorites.Add(favorite);
+                    context.SaveChanges();
+                }
+
+                MessageBox.Show($"\"{recipe.RecipeName}\" добавлен в избранное!", "Избранное", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void BtnExportCsv_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV файлы (*.csv)|*.csv",
+                FileName = "export_recipes.csv"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine("Название;Описание;Категория;Время приготовления (мин)");
+
+                foreach (var recipe in listProduct.Items.Cast<Recipes>())
+                {
+                    string name = recipe.RecipeName?.Replace(";", ",") ?? "";
+                    string desc = recipe.Description?.Replace(";", ",") ?? "";
+                    string category = recipe.Categories?.CategoryName?.Replace(";", ",") ?? "";
+                    string time = recipe.CookingTime.ToString() ?? "";
+
+                    sb.AppendLine($"{name};{desc};{category};{time}");
+                }
+
+                File.WriteAllText(saveFileDialog.FileName, sb.ToString(), Encoding.UTF8);
+                MessageBox.Show("Файл успешно сохранён:\n" + saveFileDialog.FileName, "Экспорт CSV", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void BtnCart_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PageCart(AppConnect.CurrentUser));
+        }
+
+        private void BtnFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PageFavorites());
+        }
+
+        private void BtnOrders_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PageOrders());
+        }
+
+        private void BtnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PageAbout());
+        }
+
     }
 }

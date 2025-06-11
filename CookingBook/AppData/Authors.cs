@@ -18,6 +18,9 @@ namespace CookingBook.AppData
         public Authors()
         {
             this.Recipes = new HashSet<Recipes>();
+            this.Cart = new HashSet<Cart>();
+            this.Favorites = new HashSet<Favorites>();
+            this.Orders = new HashSet<Orders>();
         }
     
         public int AuthorID { get; set; }
@@ -31,5 +34,11 @@ namespace CookingBook.AppData
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Recipes> Recipes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Cart { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Favorites> Favorites { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orders> Orders { get; set; }
     }
 }

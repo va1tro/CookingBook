@@ -5,70 +5,83 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CookingBook.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="452.88" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="800"
       Title="PageRecipes">
 
-    <Grid Background="#FF6FCA27">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="33"/>
-            <RowDefinition Height="497*"/>
-            <RowDefinition Height="50"/>
-        </Grid.RowDefinitions>
+    <DockPanel Background="#FF6FCA27">
 
-        <!-- Панель фильтров и поиска -->
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="0">
-            <StackPanel.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF6FCA27"/>
-                    <GradientStop Color="#FFCABB15" Offset="1"/>
-                </LinearGradientBrush>
-            </StackPanel.Background>
-            <ComboBox x:Name="ComboFilter" VerticalAlignment="Center" Width="209" SelectionChanged="ComboFilter_SelectionChanged" Height="26" Margin="5"/>
-            <ComboBox x:Name="ComboSort" VerticalAlignment="Center" Width="190" Height="26" Margin="5" SelectionChanged="ComboSort_SelectionChanged"/>
-            <TextBox x:Name="TextSearch" TextWrapping="Wrap" VerticalAlignment="Center" Width="186" Height="26" Margin="5" TextChanged="TextSearch_TextChanged"/>
-        </StackPanel>
+        <!-- Меню-бар -->
+        <ToolBar DockPanel.Dock="Top" Background="#FF5FB925">
+            <Button Content="Выход" Click="BtnExit_Click" Margin="2"/>
+            <Button Content="Экспорт в CSV" Click="BtnExportCsv_Click" Margin="2"/>
+            <Separator/>
+            <Button Content="Корзина" Click="BtnCart_Click" Margin="2"/>
+            <Button Content="Избранное" Click="BtnFavorites_Click" Margin="2"/>
+            <Separator/>
+            <Button Content="Мои заказы" Click="BtnOrders_Click" Margin="2"/>
+            <Button Content="О нас" Click="BtnAbout_Click" Margin="2"/>
+        </ToolBar>
 
-        <!-- Список рецептов -->
-        <ListView x:Name="listProduct" Grid.Row="1" ScrollViewer.CanContentScroll="False" Margin="0,5,0,45" Grid.RowSpan="2">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="700"/>
-                            <ColumnDefinition Width="200"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding CurrentPhoto}" Grid.Column="0" Margin="10"/>
-                        <StackPanel Grid.Column="1" Width="auto" Orientation="Vertical" HorizontalAlignment="Left">
-                            <TextBlock Text="{Binding RecipeName}" FontWeight="Bold"/>
-                            <TextBlock>
-                                <Run Text="Категория: "/>
-                                <Run Text="{Binding Categories.CategoryName}"/>
-                            </TextBlock>
-                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <TextBlock>
-                                <Run Text="Время: "/>
-                                <Run Text="{Binding CookingTime}"/>
-                                <Run Text=" мин"/>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <!-- Основной контент -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="33"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
 
-        <!-- Кнопки управления -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-            <Button x:Name="btnAdd" Content="Добавить" Width="100" Margin="5" Click="BtnAdd_Click"/>
-            <Button x:Name="btnEdit" Content="Изменить" Width="100" Margin="5" Click="BtnEdit_Click"/>
-            <Button x:Name="btnDelete" Content="Удалить" Width="100" Margin="5" Click="BtnDelete_Click"/>
-        </StackPanel>
+            <!-- Фильтры и поиск (слегка ниже) -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
+                <ComboBox x:Name="ComboFilter" Width="180" Margin="5" SelectionChanged="ComboFilter_SelectionChanged"/>
+                <ComboBox x:Name="ComboSort" Width="150" Margin="5" SelectionChanged="ComboSort_SelectionChanged"/>
+                <TextBox x:Name="TextSearch" Width="200" Margin="5" TextChanged="TextSearch_TextChanged" />
+            </StackPanel>
 
-        <TextBlock x:Name="tbCounter" Text="Не найдено" Grid.Row="2" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-    </Grid>
+            <!-- Список рецептов -->
+            <ListView x:Name="listProduct" Grid.Row="1" Margin="0,5,0,45" ScrollViewer.CanContentScroll="False">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="200"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding CurrentPhoto}" Grid.Column="0" Margin="5"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding RecipeName}" FontWeight="Bold" FontSize="14"/>
+                                    <TextBlock>
+                                        <Run Text="Категория: "/>
+                                        <Run Text="{Binding Categories.CategoryName}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Vertical">
+                                    <TextBlock>
+                                        <Run Text="Время: "/>
+                                        <Run Text="{Binding CookingTime}"/>
+                                        <Run Text=" мин"/>
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                        <Button Content="🛒 В корзину" Click="BtnAddToCart_Click" Tag="{Binding}" Margin="2"/>
+                                        <Button Content="⭐ В избранное" Click="BtnAddToFavorites_Click" Tag="{Binding}" Margin="2"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!-- Удаление/изменение/добавление -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                <Button x:Name="btnAdd" Content="Добавить" Width="100" Margin="5" Click="BtnAdd_Click"/>
+                <Button x:Name="btnEdit" Content="Изменить" Width="100" Margin="5" Click="BtnEdit_Click"/>
+                <Button x:Name="btnDelete" Content="Удалить" Width="100" Margin="5" Click="BtnDelete_Click"/>
+            </StackPanel>
+
+            <TextBlock x:Name="tbCounter" Text="Не найдено" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </Grid>
+    </DockPanel>
 </Page>

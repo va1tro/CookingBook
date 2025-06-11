@@ -12,12 +12,15 @@ namespace CookingBook.AppData
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class Cart
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int CartID { get; set; }
+        public int AuthorID { get; set; }
+        public int RecipeID { get; set; }
+        public int Quantity { get; set; }
+        public System.DateTime DateAdded { get; set; }
+    
+        public virtual Authors Authors { get; set; }
+        public virtual Recipes Recipes { get; set; }
     }
 }

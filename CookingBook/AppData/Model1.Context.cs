@@ -33,7 +33,10 @@ namespace CookingBook.AppData
         public virtual DbSet<Recipes> Recipes { get; set; }
         public virtual DbSet<RecipeTags> RecipeTags { get; set; }
         public virtual DbSet<Reviews> Reviews { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Tags> Tags { get; set; }
+        public virtual DbSet<Cart> Cart { get; set; }
+        public virtual DbSet<Favorites> Favorites { get; set; }
+        public virtual DbSet<OrderItems> OrderItems { get; set; }
+        public virtual DbSet<Orders> Orders { get; set; }
     }
 }

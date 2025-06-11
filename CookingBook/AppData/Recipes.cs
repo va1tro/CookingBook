@@ -21,6 +21,9 @@ namespace CookingBook.AppData
             this.RecipeIngredients = new HashSet<RecipeIngredients>();
             this.RecipeTags = new HashSet<RecipeTags>();
             this.Reviews = new HashSet<Reviews>();
+            this.Cart = new HashSet<Cart>();
+            this.Favorites = new HashSet<Favorites>();
+            this.OrderItems = new HashSet<OrderItems>();
         }
     
         public int RecipeID { get; set; }
@@ -30,6 +33,7 @@ namespace CookingBook.AppData
         public int AuthorID { get; set; }
         public int CookingTime { get; set; }
         public string Image { get; set; }
+        public int Price { get; set; }
     
         public virtual Authors Authors { get; set; }
         public virtual Categories Categories { get; set; }
@@ -41,5 +45,11 @@ namespace CookingBook.AppData
         public virtual ICollection<RecipeTags> RecipeTags { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reviews> Reviews { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Cart { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Favorites> Favorites { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderItems> OrderItems { get; set; }
     }
 }

@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="Model.Recipes" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.RecipeTags" Width="1.5" PointX="8.25" PointY="5.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Reviews" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.sysdiagrams" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Tags" Width="1.5" PointX="6" PointY="1.75" IsExpanded="true" />
         <AssociationConnector Association="Model.FK_Recipes_Authors" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Recipes_Categories" ManuallyRouted="false" />
@@ -23,6 +22,17 @@
         <AssociationConnector Association="Model.FK_RecipeTags_Recipes" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_Reviews_Recipes" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_RecipeTags_Tags" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.Cart" Width="1.5" PointX="8.25" PointY="8.625" />
+        <EntityTypeShape EntityType="Model.Favorites" Width="1.5" PointX="8.25" PointY="1.75" />
+        <EntityTypeShape EntityType="Model.OrderItems" Width="1.5" PointX="8.25" PointY="12" />
+        <EntityTypeShape EntityType="Model.Orders" Width="1.5" PointX="3" PointY="12.75" />
+        <AssociationConnector Association="Model.FK_Cart_Authors" />
+        <AssociationConnector Association="Model.FK_Favorites_Authors" />
+        <AssociationConnector Association="Model.FK_Orders_Authors" />
+        <AssociationConnector Association="Model.FK_Cart_Recipes" />
+        <AssociationConnector Association="Model.FK_Favorites_Recipes" />
+        <AssociationConnector Association="Model.FK_OrderItems_Orders" />
+        <AssociationConnector Association="Model.FK_OrderItems_Recipes" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

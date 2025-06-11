@@ -1,0 +1,61 @@
+﻿<Page x:Class="CookingBook.Pages.PageFavorites"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CookingBook.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PageFavorites">
+
+    <Grid Background="#FF6FCA27">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя панель -->
+        <DockPanel Background="#FFCABB15" VerticalAlignment="Center" Grid.Row="0" Margin="5">
+            <Button Content="← Назад" Width="100" Height="30" Margin="10,0"
+                    Click="BtnBack_Click"/>
+            <TextBlock Text="Избранные рецепты" FontSize="20" FontWeight="Bold"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Margin="0,0,10,0"/>
+        </DockPanel>
+
+        <!-- Список избранных -->
+        <ListView x:Name="listFavorites" Grid.Row="1" Margin="10">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="5" Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding Recipes.CurrentPhoto}" Grid.Column="0" Margin="10" Width="80" Height="80"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0">
+                            <TextBlock Text="{Binding Recipes.RecipeName}" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock>
+                                <Run Text="Категория: "/>
+                                <Run Text="{Binding Recipes.Categories.CategoryName}"/>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Recipes.Description}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
+                            <TextBlock>
+                                <Run Text="Время: "/>
+                                <Run Text="{Binding Recipes.CookingTime}"/>
+                                <Run Text=" мин"/>
+                            </TextBlock>
+                            <Button Content="Удалить" Click="BtnRemoveFavorite_Click" Tag="{Binding}" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <TextBlock x:Name="tbEmpty" Text="Избранных рецептов нет." Visibility="Collapsed"
+                   Grid.Row="1" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Page>
